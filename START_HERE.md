@@ -1,28 +1,36 @@
-# SeismoCore Explore 啟動說明
+# 先看這裡：GitHub Pages 正確部署方式
 
-這是保留 React/Vite 動態功能的版本，不是純靜態版。為避免 Codespaces 上 `npm install` 卡住，本壓縮檔已附 `node_modules`，可直接啟動。
+你的網頁目前空白，主因不是 React 程式壞掉，而是 GitHub Pages 正在讀取「Vite 開發用 index.html」，它裡面還寫著：
 
-## 最穩定啟動方式
+```html
+<script type="module" src="/src/main.jsx"></script>
+```
+
+GitHub Pages 不會自動把 JSX 編譯成瀏覽器可直接執行的 JavaScript，因此會空白。
+
+本修正版保留 React + Vite 動態互動版，並額外提供 `docs/` 資料夾。`docs/` 已經是打包好的網站，可直接給 GitHub Pages 顯示。
+
+## 使用方式
+
+1. 將本資料夾全部上傳 / 覆蓋到你的 GitHub repo。
+2. 到 GitHub repo 的 `Settings > Pages`。
+3. Source 選 `Deploy from a branch`。
+4. Branch 選 `main`，資料夾選 `/docs`。
+5. 儲存後等待約 1–3 分鐘，再開啟：
+
+```text
+https://tsengpokai.github.io/SEISmology_ch3/
+```
+
+## 重要
+
+不要把 GitHub Pages 設成 `main / root`，因為 root 是 Vite 原始碼，不是打包後網站。
+
+若要在 Codespaces 預覽原始碼版本，可用：
 
 ```bash
+npm install --no-audit --no-fund --progress=false
 npm run dev
 ```
 
-Codespaces 會跳出 5173 Port，按 Open in Browser。
-
-## 不要一開始就跑 npm install
-
-此包已附 `node_modules`。若你執行 `npm install` 時遇到 `Exit handler never called!`，通常是 npm 快取或 npm 本身卡住，不是 React 程式碼錯誤。
-
-## 若一定要重裝
-
-```bash
-npm cache clean --force
-rm -rf ~/.npm/_cacache ~/.npm/_logs node_modules package-lock.json dist .vite
-npm install --no-audit --no-fund --progress=false --legacy-peer-deps
-npm run dev
-```
-
-## 部署 GitHub Pages
-
-本專案保留 `.github/workflows/deploy.yml`，push 到 main 後可由 GitHub Actions 建置與部署。
+但只要是正式 GitHub Pages 部署，請用 `main / docs`。

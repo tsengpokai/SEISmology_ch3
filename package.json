@@ -7,14 +7,12 @@
     "dev": "vite --host 0.0.0.0 --port 5173",
     "build": "vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4173",
-    "safe-reset": "rm -rf dist .vite && npm cache verify",
-    "clean-install": "rm -rf node_modules package-lock.json dist .vite && npm cache clean --force && npm install --no-audit --no-fund --progress=false --legacy-peer-deps"
+    "deploy:docs": "npm run build && rm -rf docs && cp -R dist docs && touch docs/.nojekyll"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "6.0.1",
-    "vite": "8.0.10",
-    "react": "19.2.5",
-    "react-dom": "19.2.5"
-  },
-  "devDependencies": {}
+    "@vitejs/plugin-react": "4.3.4",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "vite": "5.4.11"
+  }
 }

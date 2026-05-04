@@ -1,77 +1,33 @@
 # 震探地心 SeismoCore Explore
 
-互動式教學網頁：**地震學第三章：地震波與地球結構**。本專案使用 Vite + React，適合 GitHub Codespaces、GitHub Pages 與一般靜態網站部署。
+互動式教學網頁：地震學第三章「地震波與地球結構」。本專案保留 React + Vite 動態互動功能，並已提供可直接部署到 GitHub Pages 的 `docs/` 打包版。
 
-## 功能總覽
+## 正式部署
 
-- 母導覽頁：地球剖面 SVG、第三章關鍵三問、8 個章節入口。
-- 3.1–3.8 子章節：每節包含重點摘要、公式、教授小提醒、收納式重點整理、互動模擬與小測驗。
-- 互動模擬：
-  - 3.1 解析度比較器
-  - 3.2 折射/反射 T-x 走時沙盒
-  - 3.3 反射雙曲線、NMO 與 Dix 方程式實驗
-  - 3.4 球體地球射線彎曲與最深點
-  - 3.5 體波相位點擊挑戰
-  - 3.6 SPO/LPO 與剪力波分裂
-  - 3.7 Q 值與距離控制的衰減模擬
-  - 3.8 密度、壓力與地球層圈互動圖
-- Seismo-Code Lab：使用 Pyodide + NumPy + Matplotlib 在瀏覽器內產生 synthetic record section。
-- 支援 MathJax LaTeX、深色/淺色模式、響應式版面。
+到 GitHub Repo：
 
-## 在 Codespaces 或本機啟動
+```text
+Settings > Pages > Deploy from a branch > main > /docs
+```
+
+不要選 `main / root`，因為 root 是 Vite 原始碼。
+
+## 本機 / Codespaces 開發預覽
 
 ```bash
-npm install
+npm install --no-audit --no-fund --progress=false
 npm run dev
 ```
 
-接著開啟 Vite 顯示的網址。若使用 Codespaces，請在 Ports 面板開啟 `5173`。
-
-## 打包
+## 重新產生 docs
 
 ```bash
-npm run build
+npm run deploy:docs
 ```
 
-輸出會在 `dist/`。
+## 功能
 
-## 部署到 GitHub Pages
-
-方式一：使用本專案附的 GitHub Actions
-
-1. 將整個資料夾推送到 GitHub repo。
-2. 到 repo 的 `Settings > Pages`。
-3. Source 選 `GitHub Actions`。
-4. 推送到 `main` 後會自動 build 並部署。
-
-方式二：手動部署
-
-```bash
-npm install
-npm run build
-```
-
-把 `dist/` 內容放到 GitHub Pages 指定分支或靜態網站空間。
-
-## Seismo-Code Lab 注意事項
-
-瀏覽器端不能保證安裝完整 ObsPy，因此網頁內建的 Lab 使用 NumPy/Matplotlib 生成類似 record section 的合成波形，用於教學展示。若要處理真實 SAC 檔案，請在本機 Python 環境執行 `local_obspy_plot.py`，流程包含：
-
-- 使用 `obspy.read("*Z.D*.SAC")` 讀取垂直分量。
-- 以 HHZ > EHZ > HLZ/HNZ 的優先順序做測站去重。
-- 截取發震前後時間窗、demean、bandpass、必要時降採樣。
-- 從 SAC header 的 `dist`、`gcarc` 或測站/震央座標取得震央距。
-- 使用 `X = distance + normalized_amplitude * amp_scale` 繪製 record section。
-
-## 主要檔案
-
-```text
-index.html
-vite.config.js
-package.json
-src/main.jsx
-src/App.jsx
-src/styles.css
-local_obspy_plot.py
-.github/workflows/deploy.yml
-```
+- 母導覽頁：動態地球剖面、第三章關鍵三問、8 個章節入口。
+- 子章節 3.1–3.8：每節包含摘要、公式、教授小提醒、互動模擬、課本圖片圖說與 Quiz。
+- 互動內容：折射/反射 T-x 沙盒、Dix 方程式、球體地球射線彎曲、體波相位挑戰、SPO/LPO 非均向性、Q 值衰減、密度壓力互動圖。
+- 支援深色 / 淺色模式、MathJax LaTeX、響應式版面。

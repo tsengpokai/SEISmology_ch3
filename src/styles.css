@@ -356,3 +356,182 @@ hr { width: 100%; border: 0; border-top: 1px solid var(--line); }
   .textbook-figure.wide { grid-column: auto; }
   .figure-image-wrap { min-height: 180px; padding: 10px; }
 }
+
+/* Personal record-section project page */
+.record-lab {
+  display: grid;
+  gap: 22px;
+}
+.record-hero-card {
+  padding: 22px;
+  border-radius: 26px;
+}
+.record-hero-card h3 {
+  margin: 4px 0 10px;
+  font-family: "Playfair Display", "Source Serif 4", serif;
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+}
+.record-hero-card p:last-child {
+  color: var(--muted);
+  line-height: 1.85;
+  margin: 0;
+}
+.record-grid {
+  align-items: stretch;
+}
+.record-viewer {
+  min-width: 0;
+}
+.record-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.record-toolbar h3 {
+  margin: 4px 0 0;
+  font-family: "Source Serif 4", serif;
+  font-size: 1.25rem;
+}
+.toggle-group.compact {
+  flex-wrap: nowrap;
+}
+.toggle-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0 14px;
+  color: var(--muted);
+}
+.small-btn {
+  border: 1px solid rgba(148,163,184,.25);
+  border-radius: 999px;
+  background: rgba(148,163,184,.08);
+  color: var(--text);
+  padding: 7px 12px;
+  cursor: pointer;
+}
+.small-btn.active,
+.toggle-line .active {
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, rgba(148,163,184,.25));
+}
+.record-image-frame {
+  position: relative;
+  overflow: auto;
+  border-radius: 22px;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, rgba(148,163,184,.2));
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.98), rgba(241,245,249,.96)),
+    repeating-linear-gradient(90deg, rgba(15,23,42,.04), rgba(15,23,42,.04) 1px, transparent 1px, transparent 22px);
+  max-height: 640px;
+}
+.record-image-frame img {
+  width: 100%;
+  min-width: 720px;
+  display: block;
+  object-fit: contain;
+}
+.record-callout {
+  position: absolute;
+  z-index: 2;
+  max-width: 230px;
+  padding: 9px 12px;
+  border-radius: 14px;
+  font-size: .82rem;
+  line-height: 1.45;
+  color: #0f172a;
+  background: rgba(255,255,255,.88);
+  border: 1px solid rgba(15,23,42,.18);
+  box-shadow: 0 12px 30px rgba(2,6,23,.18);
+  backdrop-filter: blur(8px);
+}
+.record-callout.distance { left: 44%; bottom: 18px; }
+.record-callout.time { left: 18px; top: 32%; }
+.record-callout.trend { right: 22px; top: 46%; }
+.record-controls .numbers.big {
+  grid-template-columns: 1fr;
+}
+.record-analysis-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+.analysis-card {
+  padding: 18px;
+  border-radius: 22px;
+}
+.analysis-card strong {
+  display: block;
+  margin-bottom: 8px;
+  color: color-mix(in srgb, var(--accent) 68%, var(--text));
+  font-family: "Source Serif 4", serif;
+  font-size: 1.05rem;
+}
+.analysis-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.75;
+  font-size: .93rem;
+}
+.process-board {
+  padding: 24px;
+  border-radius: 30px;
+}
+.process-steps {
+  list-style: none;
+  margin: 18px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 14px;
+}
+.process-steps li {
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(148,163,184,.22);
+  background: rgba(148,163,184,.07);
+}
+.process-steps span {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: 10px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  color: color-mix(in srgb, var(--accent) 80%, var(--text));
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  font-size: .76rem;
+  font-weight: 800;
+}
+.process-steps strong {
+  display: block;
+  margin-bottom: 6px;
+  font-family: "Source Serif 4", serif;
+}
+.process-steps p,
+.code-note p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.7;
+  font-size: .92rem;
+}
+.code-note {
+  padding: 18px 20px;
+  border-radius: 22px;
+}
+.code-note strong {
+  display: block;
+  margin-bottom: 6px;
+}
+@media (max-width: 1100px) {
+  .record-analysis-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .process-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 720px) {
+  .record-toolbar { align-items: flex-start; flex-direction: column; }
+  .record-image-frame img { min-width: 620px; }
+  .record-analysis-grid, .process-steps { grid-template-columns: 1fr; }
+  .record-callout { display: none; }
+}

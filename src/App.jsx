@@ -208,11 +208,58 @@ const modules = [
       explain: '均勻球體的無因次轉動慣量約 0.4；地球約 0.33，表示質量更集中在內部。'
     },
     component: 'composition'
+  },
+  {
+    id: '實作',
+    hash: 'record-section',
+    title: '繪製走時與波形剖面圖',
+    subtitle: '從 Taiwan GDMS 的 SAC 地震資料，到自己的 Record Section 成果',
+    icon: '▥',
+    depth: 'Taiwan GDMS / CWASN / 0–400 km',
+    accent: '#34d399',
+    summary: '這一頁整理你親自從 Taiwan GDMS 下載 2026/05/01 地震資料、使用 Antigravity 協助除錯與繪圖，最後產出黑白版與彩色版走時—波形剖面圖的完整流程。',
+    formula: '$X=d+u_{norm}\\times amp\\_scale,\\quad Y=t-t_0$',
+    formulaLabel: 'Record Section 的座標邏輯',
+    note: 'Record Section 不是單純把很多波形疊在一起，而是把每一個測站的波形依「震央距」排開。橫向位置代表測站離震央多遠，縱向代表發震後經過多少秒，因此你可以直接看出不同測站的抵達時間是否形成有規律的走時趨勢。',
+    bullets: [
+      '資料來源為 Taiwan GDMS / CWASN SAC 波形資料，並搭配中央氣象署地震報告確認事件資訊。',
+      '前處理包含讀取 Z 分量 SAC、測站去重、截取發震前後時間窗、去平均值、0.5–5.0 Hz 帶通濾波與降採樣。',
+      '橫軸是震央距 Distance (km)，縱軸是發震後時間 Time / Travel Time (s)，每條直立波形代表一個測站。',
+      '黑白版強調整體波群斜率與走時趨勢；彩色版則透過測站分色與標籤，讓不同測站更容易被辨認。',
+      '圖上波形能量在約 20–100 秒間隨距離呈現帶狀分布，代表近震體波與後續散射/表面波能量隨距離改變。'
+    ],
+    quiz: {
+      question: '在這張 Record Section 中，為什麼每條測站波形要依震央距排在不同的 X 位置？',
+      options: ['為了把波形變成走時—距離圖，判讀不同相位的速度趨勢', '只是為了讓圖片比較寬', '因為所有測站都在同一個位置'],
+      answer: 0,
+      explain: 'Record Section 的核心就是把波形依距離排列，讓同一相位在多測站上形成可追蹤的走時斜率。'
+    },
+    component: 'recordsection'
   }
 ];
 
 
 const textbookFigures = {
+  recordsection: [
+    {
+      src: './textbook/gdms-record-section-color.png',
+      title: '你的作品｜彩色版走時與波形剖面圖',
+      caption: '彩色版將不同測站波形以循環色系標示，橫軸為震央距，縱軸為發震後秒數。這能同時呈現各測站到時、能量強弱與波群隨距離延遲的趨勢。',
+      wide: true
+    },
+    {
+      src: './textbook/gdms-record-section-bw.png',
+      title: '你的作品｜黑白版 Record Section',
+      caption: '黑白版更接近傳統地震學波形剖面圖的閱讀方式，重點在於觀察整體波群斜率、相位連續性與振幅集中區。',
+      wide: true
+    },
+    {
+      src: './textbook/cwa-event-report-20260501.png',
+      title: '事件背景｜中央氣象署地震報告截圖',
+      caption: '這張圖提供地震事件的震央位置、深度、規模與各地震度，是將 GDMS 波形資料連結到真實地震事件的重要背景資料。',
+      wide: true
+    }
+  ],
   resolution: [
     {
       src: './textbook/fig-3-2-1-ray-paths.webp',
@@ -476,7 +523,7 @@ function Dashboard({ navigate }) {
           </p>
           <div className="hero-actions">
             <button className="primary-btn" onClick={() => navigate('m32')}>開始玩折射 / 反射模擬</button>
-            <button className="ghost-btn" onClick={() => navigate('lab')}>前往 Seismo-Code Lab</button>
+            <button className="ghost-btn" onClick={() => navigate('record-section')}>看我的走時剖面圖</button>
           </div>
         </div>
         <EarthDashboard navigate={navigate} />
@@ -728,6 +775,7 @@ function InteractiveSwitch({ type }) {
     case 'anisotropy': return <AnisotropyLab />;
     case 'attenuation': return <AttenuationSimulator />;
     case 'composition': return <CompositionDensityLab />;
+    case 'recordsection': return <RecordSectionLab />;
     default: return null;
   }
 }
@@ -741,7 +789,8 @@ function getReadingTip(type) {
     bodywaves: '相位名稱可拆字讀：c 是 CMB 反射、K 是外核路徑、I 是內核路徑、diff 是繞射。',
     anisotropy: '看非均向性時不要只問哪裡快，要問「哪個方向快、哪個偏振快」，這才會連到構造方向。',
     attenuation: '振幅變小不一定代表能量消失；先分清楚幾何擴散、散射與真正非彈性耗能。',
-    composition: '波速模型不是成分模型。成分推論還要同時滿足密度、壓力、轉動慣量與高壓礦物物理。'
+    composition: '波速模型不是成分模型。成分推論還要同時滿足密度、壓力、轉動慣量與高壓礦物物理。',
+    recordsection: '看 Record Section 時，先看橫軸距離、縱軸時間，再找出跨測站連續出現的波群。若某一群能量隨距離呈斜線排列，就代表一個可追蹤的相位或波群。'
   };
   return tips[type] || '';
 }
@@ -1211,6 +1260,113 @@ function layerAt(depth) {
   if (depth < 2890) return '下部地函 Lower Mantle';
   if (depth < 5150) return '液態外核 Outer Core';
   return '固態內核 Inner Core';
+}
+
+
+function RecordSectionLab() {
+  const [view, setView] = useState('color');
+  const [ampScale, setAmpScale] = useState(8);
+  const [timeWindow, setTimeWindow] = useState(120);
+  const [showGuide, setShowGuide] = useState(true);
+  const imageSrc = view === 'color' ? './textbook/gdms-record-section-color.png' : './textbook/gdms-record-section-bw.png';
+  const imageTitle = view === 'color' ? '彩色版：多測站分色與標籤' : '黑白版：傳統 Record Section 風格';
+  return (
+    <div className="record-lab">
+      <div className="record-hero-card glass-lite">
+        <p className="eyebrow">Your Field-to-Code Work</p>
+        <h3>從 GDMS 下載資料 → Antigravity 協助分析 → 繪出 Record Section</h3>
+        <p>
+          這個子頁不是單純展示圖片，而是把你實際完成的地震資料處理流程放回第三章脈絡中：
+          走時曲線、測站距離、濾波、振幅正規化與波形剖面圖，都是 3.2–3.5 章節知識的實作成果。
+        </p>
+      </div>
+
+      <div className="interactive-grid record-grid">
+        <div className="sim-card record-viewer">
+          <div className="record-toolbar">
+            <div>
+              <p className="eyebrow">Record Section Viewer</p>
+              <h3>{imageTitle}</h3>
+            </div>
+            <div className="toggle-group compact">
+              <button className={view === 'color' ? 'active' : ''} onClick={() => setView('color')}>彩色版</button>
+              <button className={view === 'bw' ? 'active' : ''} onClick={() => setView('bw')}>黑白版</button>
+            </div>
+          </div>
+          <div className="record-image-frame">
+            <img src={imageSrc} alt={imageTitle} />
+            {showGuide && (
+              <>
+                <span className="record-callout distance">Distance：測站離震央越遠，越往右</span>
+                <span className="record-callout time">Time：發震後秒數，往下或往上依圖軸設定判讀</span>
+                <span className="record-callout trend">連續斜帶：可追蹤的波群走時趨勢</span>
+              </>
+            )}
+          </div>
+        </div>
+        <div className="control-panel record-controls">
+          <div className="toggle-line">
+            <span>讀圖輔助標籤</span>
+            <button className={showGuide ? 'active small-btn' : 'small-btn'} onClick={() => setShowGuide(!showGuide)}>{showGuide ? '開啟' : '關閉'}</button>
+          </div>
+          <Slider label="示意振幅放大 amp_scale" value={ampScale} min={2} max={16} step={1} unit="×" onChange={setAmpScale} />
+          <Slider label="示意時間窗" value={timeWindow} min={60} max={140} step={10} unit=" s" onChange={setTimeWindow} />
+          <div className="numbers big">
+            <span>事件時間：2026-05-01 12:39:55 UTC</span>
+            <span>資料網路：CWASN / Taiwan GDMS</span>
+            <span>成功繪製：117 個測站</span>
+            <span>濾波頻帶：0.5–5.0 Hz</span>
+            <span>座標公式：X = distance + normalized amplitude × amp_scale</span>
+          </div>
+          <p className="sim-explain">
+            調整 amp_scale 的概念是改變每條波形左右擺動的寬度；太小會看不清波形，太大會互相重疊。
+            你的正式圖片採用兼顧可讀性與密度的設定，因此能同時看到整體走時趨勢與單站波形細節。
+          </p>
+        </div>
+      </div>
+
+      <div className="record-analysis-grid">
+        <article className="analysis-card glass-lite">
+          <strong>圖表代表什麼？</strong>
+          <p>它把多個測站的垂直分量波形依震央距排列，讓地震波抵達時間與測站距離的關係直接呈現在同一張圖中。</p>
+        </article>
+        <article className="analysis-card glass-lite">
+          <strong>能從圖上看出什麼？</strong>
+          <p>近距離測站較早出現強能量，遠距離測站的主要波群整體延後，形成可追蹤的斜向波群帶，對應體波與後續散射/表面波能量。</p>
+        </article>
+        <article className="analysis-card glass-lite">
+          <strong>彩色版的意義</strong>
+          <p>不同測站用顏色與站名標示，可快速辨認單一測站位置，適合展示資料密集但仍需追蹤個別站點的成果。</p>
+        </article>
+        <article className="analysis-card glass-lite">
+          <strong>黑白版的意義</strong>
+          <p>黑白線條弱化色彩干擾，讓讀者更專注於波群斜率、振幅集中區與不同距離的到時變化。</p>
+        </article>
+      </div>
+
+      <div className="process-board glass">
+        <div className="zone-title">
+          <p className="eyebrow">Processing Workflow</p>
+          <h2>你的資料處理流程</h2>
+        </div>
+        <ol className="process-steps">
+          <li><span>01</span><strong>資料取得</strong><p>到 Taiwan GDMS 下載指定地震事件的 CWASN SAC 波形資料。</p></li>
+          <li><span>02</span><strong>讀取與測站去重</strong><p>使用 ObsPy 讀取 Z 分量 SAC，並以 HHZ &gt; EHZ &gt; HLZ/HNZ 的優先順序保留每站最佳資料。</p></li>
+          <li><span>03</span><strong>截取、濾波、降採樣</strong><p>截取發震前後資料，進行 demean、0.5–5.0 Hz bandpass，並降低高取樣率資料造成的繪圖負擔。</p></li>
+          <li><span>04</span><strong>震央距與座標換算</strong><p>優先讀 SAC header 的 dist/gcarc，缺值時由測站與震央座標計算距離。</p></li>
+          <li><span>05</span><strong>繪製 Record Section</strong><p>將每條波形正規化後乘上 amp_scale，再加到震央距上，形成走時與波形剖面圖。</p></li>
+        </ol>
+      </div>
+
+      <div className="code-note glass-lite">
+        <strong>和 Seismo-Code Lab 的連結：</strong>
+        <p>
+          網頁底部的 Seismo-Code Lab 用瀏覽器安全的 synthetic waveform 示範同一個概念；
+          你的正式成果則是使用真實 GDMS / SAC 資料與 ObsPy/Matplotlib 完成，因此更接近專業地震學資料處理流程。
+        </p>
+      </div>
+    </div>
+  );
 }
 
 const defaultLabCode = String.raw`# Seismo-Code Lab: browser-safe record section demo

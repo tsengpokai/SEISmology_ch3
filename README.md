@@ -31,3 +31,23 @@ npm run deploy:docs
 - 子章節 3.1–3.8：每節包含摘要、公式、教授小提醒、互動模擬、課本圖片圖說與 Quiz。
 - 互動內容：折射/反射 T-x 沙盒、Dix 方程式、球體地球射線彎曲、體波相位挑戰、SPO/LPO 非均向性、Q 值衰減、密度壓力互動圖。
 - 支援深色 / 淺色模式、MathJax LaTeX、響應式版面。
+
+## 新增子頁：繪製走時與波形剖面圖
+
+本版本新增「繪製走時與波形剖面圖」子頁，展示使用 Taiwan GDMS / CWASN SAC 波形資料製作 Record Section 的完整作品流程。頁面包含：
+
+- 中央氣象署地震事件背景圖。
+- 黑白版與彩色版 Record Section 成果切換。
+- 互動式讀圖輔助標籤。
+- amp_scale 與時間窗概念滑桿。
+- 資料取得、ObsPy 讀取、測站去重、濾波、降採樣、震央距換算與 Matplotlib 繪圖流程。
+
+部署 GitHub Pages 時請使用 `main / docs`。
+
+```bash
+npm install --no-audit --no-fund --progress=false
+npm run deploy:docs
+git add .
+git commit -m "Add record section project page"
+git push
+```

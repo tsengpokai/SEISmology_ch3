@@ -62,7 +62,7 @@ const modules = [
     depth: '沉積盆地—深部地殼',
     accent: '#22d3ee',
     summary: '反射震測觀察地下介面反射回來的波，透過雙曲線走時、NMO 校正、CMP 疊加與 Dix 方程式得到速度與構造影像。',
-    formula: '$T(x)^2=t_0^2+\\\\frac{x^2}{v_{rms}^2},\\\\quad v_n^2=\\\\frac{V_{rms,n}^2t_n-V_{rms,n-1}^2t_{n-1}}{t_n-t_{n-1}}$',
+    formula: '$T(x)^{2}=t_0^{2}+\\\\frac{x^{2}}{v_{rms}^{2}},\\\\quad v_n^{2}=\\\\frac{V_{rms,n}^{2}t_n-V_{rms,n-1}^{2}t_{n-1}}{t_n-t_{n-1}}$',
     formulaLabel: '反射雙曲線與 Dix 層速度公式',
     note: '反射震測像是用回音定位地下界面。偏移距越大，回音會晚一點到，這個晚到量就是 NMO；校正後把很多回音疊起來，真實反射會變清楚，雜訊會被平均掉。',
     bullets: [
@@ -75,7 +75,7 @@ const modules = [
       question: '反射波在 T-x 圖上最典型的形狀是什麼？',
       options: ['雙曲線', '完全水平線', '隨機鋸齒線'],
       answer: 0,
-      explain: '水平層反射走時滿足 $T(x)^2=t_0^2+x^2/v^2$，所以是雙曲線。'
+      explain: '水平層反射走時滿足 $T(x)^{2}=t_0^{2}+x^{2}/v^{2}$，所以是雙曲線。'
     },
     component: 'reflection'
   },
@@ -197,12 +197,12 @@ const modules = [
     note: '地球平均密度約 5.5 g/cm³，但地表岩石約 3 g/cm³，表示深部一定有更重的材料。轉動慣量小於均勻球，也證明質量集中在地心附近。',
     bullets: [
       '地球質量約 $5.97\\\\times10^{24}$ kg，平均密度約 5.5 g/cm³。',
-      '無因次轉動慣量 $C/Ma^2\\\\approx0.33$，低於均勻球的 0.4，顯示質量向中心集中。',
+      '無因次轉動慣量 $C/Ma^{2}\\\\approx0.33$，低於均勻球的 0.4，顯示質量向中心集中。',
       '410 km 與 660 km 密度跳躍與礦物相變有關，不只是壓力壓縮。',
       'CMB 的密度跳躍極大，地函底部到外核頂部約由 5.57 躍至 9.90 g/cm³。'
     ],
     quiz: {
-      question: '若地球是完全均勻球體，$C/Ma^2$ 約為多少？',
+      question: '若地球是完全均勻球體，$C/Ma^{2}$ 約為多少？',
       options: ['0.4', '0.03', '1.4'],
       answer: 0,
       explain: '均勻球體的無因次轉動慣量約 0.4；地球約 0.33，表示質量更集中在內部。'
@@ -1379,7 +1379,7 @@ function CompositionDensityLab() {
           <span>估計密度：{density.toFixed(2)} g/cm³</span>
           <span>估計壓力：{pressure.toFixed(0)} GPa</span>
           <span>地球平均密度：約 5.5 g/cm³</span>
-          <span>轉動慣量 $C/Ma^2$：約 0.33</span>
+          <span>轉動慣量 $C/Ma^{2}$：約 0.33</span>
         </div>
         <p className="sim-explain">Adams-Williamson 方程式描述均勻材料因自體壓縮造成的密度增加；若密度跳躍遠大於壓縮效果，通常暗示相變或成分改變。</p>
       </div>

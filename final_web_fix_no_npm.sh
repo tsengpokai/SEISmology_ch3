@@ -1,4 +1,4 @@
-bash final_web_fix_no_npm.sh#!/usr/bin/env bash
+#!/usr/bin/env bash
 set -euo pipefail
 
 ROOT="$(pwd)"

@@ -399,14 +399,19 @@ const textbookFigures = {
 };
 
 const phaseInfo = {
-  P: 'P：只以 P 波形式穿越地函，是最基本的直達體波。',
-  S: 'S：剪力波，只能在固體中傳播；外地核為液態，所以 S 波不能穿過外核。互動圖中 S 線必須留在固態地函內。',
+  P: 'P：壓縮波，可在固體與液體中傳播；此處示意為在地函中轉折的直達 P 波。',
+  S: 'S：剪力波，只能在固體中傳播；直接 S 波不會進入液態外核。',
   PP: 'PP：P 波在地表反射一次後再抵達測站。',
+  SS: 'SS：S 波在地表反射一次後抵達測站，全程仍在固態地函內傳播。',
   PcP: 'PcP：P 波在核幔邊界 CMB 反射後返回地表。',
-  PKP: 'PKP：P 波進入外核（K）後再回到地函，是穿核相位。',
+  ScS: 'ScS：S 波在核幔邊界 CMB 反射後返回地表，因外核不傳 S 波，所以不會進入外核。',
+  PKP: 'PKP：P 波進入外核（K）後再回到地函，是典型穿核相位。',
   PKIKP: 'PKIKP：P 波穿過外核與內核，是研究內核的重要相位。',
-  Pdiff: 'Pdiff：P 波沿著核幔邊界繞射，常與陰影區邊緣有關。'
+  PKiKP: 'PKiKP：P 波進入外核後，在內核邊界 ICB 反射，再返回地表。',
+  Pdiff: 'Pdiff：P 波沿著核幔邊界附近繞射，常與陰影區邊緣有關。',
+  SKS: 'SKS：地函段是 S 波，外核段轉為 K，也就是外核中的 P 波，離開外核後再轉回 S 波。'
 };
+
 
 function useHashRoute() {
   const [hash, setHash] = useState(() => window.location.hash.replace('#', '') || 'dashboard');
@@ -809,12 +814,15 @@ function Slider({ label, value, min, max, step, unit, onChange }) {
   );
 }
 
+
 function ResolutionExplorer() {
   const [data, setData] = useState(55);
   const [contrast, setContrast] = useState(65);
   const seismic = Math.round(30 + data * 0.55 + contrast * 0.35);
   const gravity = Math.round(15 + data * 0.2 + contrast * 0.22);
   const magnetic = Math.round(18 + data * 0.18 + contrast * 0.25);
+  const pairCount = Math.max(4, Math.round(data / 8));
+  const stationCount = Math.max(3, Math.round(data / 14));
   return (
     <div className="interactive-grid two">
       <div className="sim-card">
@@ -827,14 +835,21 @@ function ResolutionExplorer() {
           </defs>
           <rect x="28" y="42" width="560" height="246" rx="22" fill="url(#subsurface)" stroke="rgba(148,163,184,.35)" />
           <path d="M28 108 H588 M28 176 H588 M28 242 H588" stroke="rgba(226,232,240,.2)" strokeDasharray="8 8" />
-          <ellipse cx="210" cy="210" rx={45 + contrast * 0.18} ry="22" fill="rgba(251,191,36,.55)" />
-          <ellipse cx="395" cy="148" rx="36" ry={18 + contrast * 0.12} fill="rgba(244,114,182,.45)" />
-          {Array.from({ length: 12 }).map((_, i) => {
-            const x = 52 + i * 45;
-            const bend = (Math.sin(i) * contrast) / 9;
-            return <path key={i} className="scan-ray" d={`M${x} 42 C${x + bend} 110, ${x - bend} 180, ${x + bend * 0.7} 288`} />;
+          <ellipse cx="210" cy="210" rx={28 + contrast * 0.28} ry={14 + contrast * 0.12} fill="rgba(251,191,36,.55)" />
+          <ellipse cx="395" cy="148" rx={22 + contrast * 0.16} ry={12 + contrast * 0.10} fill="rgba(244,114,182,.45)" />
+          {Array.from({ length: stationCount }).map((_, i) => {
+            const x = 78 + i * (460 / Math.max(1, stationCount - 1));
+            return <circle key={`sta-${i}`} cx={x} cy="52" r="4.5" fill="rgba(103,232,249,.95)" />;
+          })}
+          {Array.from({ length: pairCount }).map((_, i) => {
+            const x = 52 + i * (500 / Math.max(1, pairCount - 1));
+            const bend = (Math.sin(i * 1.35) * contrast) / 8;
+            const mid1 = 96 + (i % 3) * 26;
+            const mid2 = 184 + ((i + 1) % 3) * 24;
+            return <path key={i} className="scan-ray" d={`M${x} 42 C${x + bend} ${mid1}, ${x - bend} ${mid2}, ${x + bend * 0.7} 288`} />;
           })}
           <text x="54" y="72" className="svg-label">Seismic rays: 多路徑交叉 → 解析度高</text>
+          <text x="54" y="92" className="svg-label small">目前示意：{pairCount} 條射線、約 {stationCount} 組測站配置</text>
           <text x="54" y="312" className="svg-label small">重力/磁力多為平滑場，深部位置與形狀較不容易唯一決定</text>
         </svg>
       </div>
@@ -846,7 +861,7 @@ function ResolutionExplorer() {
           <MetricBar label="重力資料約束" value={Math.min(gravity, 100)} />
           <MetricBar label="磁力資料約束" value={Math.min(magnetic, 100)} />
         </div>
-        <p className="sim-explain">重點：地震波提供的是「沿路徑的慢度積分」，資料越密，路徑交叉越多，越能把地下速度異常定位出來。</p>
+        <p className="sim-explain">重點：地震波提供的是「沿路徑的慢度積分」，資料越密，路徑交叉越多，越能把地下速度異常定位出來。現在左圖中的射線條數會隨「震源與測站資料量」同步改變。</p>
       </div>
     </div>
   );
@@ -950,6 +965,7 @@ function RefractionSandbox() {
   );
 }
 
+
 function ReflectionLab() {
   const canvasRef = useRef(null);
   const [h, setH] = useState(2.2);
@@ -960,31 +976,97 @@ function ReflectionLab() {
   const [offset, setOffset] = useState(3.0);
   const t0 = 2 * h / vrms1;
   const tx = Math.sqrt(t0 ** 2 + (offset / vrms1) ** 2);
+  const tSecondX = Math.sqrt(t2 ** 2 + (offset / vrms2) ** 2);
   const nmo = tx - t0;
-  const dix = Math.sqrt(Math.max(0.01, (vrms2 ** 2 * t2 - vrms1 ** 2 * t1) / (t2 - t1)));
+  const dix = Math.sqrt(Math.max(0.01, (vrms2 ** 2 * t2 - vrms1 ** 2 * t1) / Math.max(0.05, t2 - t1)));
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const W = canvas.width, H = canvas.height, pad = 44;
     ctx.clearRect(0, 0, W, H);
-    ctx.strokeStyle = 'rgba(148,163,184,.35)';
-    ctx.beginPath(); ctx.moveTo(pad, 20); ctx.lineTo(pad, H - pad); ctx.lineTo(W - 24, H - pad); ctx.stroke();
-    const sx = (x) => pad + (x + 5) / 10 * (W - pad * 1.4);
-    const sy = (t) => H - pad - t / 3.1 * (H - pad * 1.4);
-    ctx.strokeStyle = '#22d3ee'; ctx.lineWidth = 2.5; ctx.beginPath();
-    for (let i = 0; i <= 220; i++) {
-      const x = -5 + i / 220 * 10;
-      const t = Math.sqrt(t0 ** 2 + (x / vrms1) ** 2);
-      if (i === 0) ctx.moveTo(sx(x), sy(t)); else ctx.lineTo(sx(x), sy(t));
+
+    const xMin = -5;
+    const xMax = 5;
+    const yMax = Math.max(3.8, t2 + 0.8, tx + 0.4, tSecondX + 0.4);
+    const sx = (x) => pad + (x - xMin) / (xMax - xMin) * (W - pad * 1.45);
+    const sy = (t) => H - pad - t / yMax * (H - pad * 1.45);
+
+    ctx.strokeStyle = 'rgba(148,163,184,.22)';
+    ctx.lineWidth = 1;
+    for (let gx = -4; gx <= 4; gx += 2) {
+      ctx.beginPath();
+      ctx.moveTo(sx(gx), 20);
+      ctx.lineTo(sx(gx), H - pad);
+      ctx.stroke();
     }
+    for (let gt = 0.5; gt <= yMax; gt += 0.5) {
+      ctx.beginPath();
+      ctx.moveTo(pad, sy(gt));
+      ctx.lineTo(W - 24, sy(gt));
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = 'rgba(148,163,184,.35)';
+    ctx.beginPath();
+    ctx.moveTo(pad, 20);
+    ctx.lineTo(pad, H - pad);
+    ctx.lineTo(W - 24, H - pad);
     ctx.stroke();
-    ctx.setLineDash([7, 6]); ctx.strokeStyle = '#fbbf24'; ctx.beginPath(); ctx.moveTo(sx(-5), sy(t0)); ctx.lineTo(sx(5), sy(t0)); ctx.stroke(); ctx.setLineDash([]);
-    ctx.fillStyle = '#e2e8f0'; ctx.font = '12px Inter'; ctx.fillText('Reflection hyperbola', sx(1.6), sy(Math.sqrt(t0 ** 2 + (1.6 / vrms1) ** 2)) - 12);
-    ctx.fillText('zero-offset t₀', sx(-4.8), sy(t0) - 8);
-    ctx.fillText('offset x', W - 76, H - 14); ctx.fillText('T', 15, 28);
-    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(sx(offset), sy(tx), 5, 0, Math.PI * 2); ctx.fill();
-  }, [h, vrms1, t0, tx, offset]);
+
+    const drawHyperbola = (tZero, vrms, color, label, labelX) => {
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 2.8;
+      ctx.beginPath();
+      for (let i = 0; i <= 260; i++) {
+        const x = xMin + i / 260 * (xMax - xMin);
+        const t = Math.sqrt(tZero ** 2 + (x / vrms) ** 2);
+        if (i === 0) ctx.moveTo(sx(x), sy(t));
+        else ctx.lineTo(sx(x), sy(t));
+      }
+      ctx.stroke();
+      const y = Math.sqrt(tZero ** 2 + (labelX / vrms) ** 2);
+      ctx.fillStyle = color;
+      ctx.font = '12px Inter';
+      ctx.fillText(label, sx(labelX), sy(y) - 12);
+      ctx.restore();
+    };
+
+    const drawZeroOffset = (time, color, label) => {
+      ctx.save();
+      ctx.setLineDash([7, 6]);
+      ctx.strokeStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(sx(xMin), sy(time));
+      ctx.lineTo(sx(xMax), sy(time));
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle = color;
+      ctx.font = '12px Inter';
+      ctx.fillText(label, sx(-4.8), sy(time) - 8);
+      ctx.restore();
+    };
+
+    drawHyperbola(t0, vrms1, '#22d3ee', '第 1 介面 hyperbola', 1.4);
+    drawHyperbola(t2, vrms2, '#f472b6', '第 2 介面 hyperbola', 2.2);
+    drawZeroOffset(t1, '#fbbf24', 't₁');
+    drawZeroOffset(t2, '#a78bfa', 't₂');
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(sx(offset), sy(tx), 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.fillStyle = '#f472b6';
+    ctx.arc(sx(offset), sy(tSecondX), 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = '#e2e8f0';
+    ctx.font = '12px Inter';
+    ctx.fillText('offset x', W - 76, H - 14);
+    ctx.fillText('T', 15, 28);
+  }, [h, vrms1, vrms2, t1, t2, t0, tx, tSecondX, offset]);
 
   return (
     <div className="interactive-grid">
@@ -1003,7 +1085,11 @@ function ReflectionLab() {
         <Slider label="第 2 介面 Vrms" value={vrms2} min={2.0} max={7.0} step={0.1} unit="" onChange={setVrms2} />
         <Slider label="t₁" value={t1} min={0.5} max={1.7} step={0.1} unit=" s" onChange={setT1} />
         <Slider label="t₂" value={t2} min={1.8} max={3.5} step={0.1} unit=" s" onChange={setT2} />
-        <p className="sim-explain">Dix 推得第 2 層速度約 <strong>{dix.toFixed(2)} km/s</strong>。</p>
+        <div className="numbers">
+          <span>第 2 介面偏移走時：{tSecondX.toFixed(2)} s</span>
+          <span>Dix interval velocity：{dix.toFixed(2)} km/s</span>
+        </div>
+        <p className="sim-explain">第 2 介面 Vrms、t₁、t₂ 會直接改變圖上的第二條反射雙曲線、零偏移時間參考線，以及 Dix 反演得到的層速度。</p>
       </div>
     </div>
   );
@@ -1058,31 +1144,88 @@ function SphericalRayLab() {
   );
 }
 
+
 function BodyWaveChallenge() {
-  const [phase, setPhase] = useState('PKP');
+  const [phase, setPhase] = useState('S');
+  const phasePaths = {
+    P: [
+      { d: 'M150 122 C218 74, 402 74, 470 122', cls: 'p' }
+    ],
+    S: [
+      { d: 'M150 122 C205 78, 415 78, 470 122', cls: 's' }
+    ],
+    PP: [
+      { d: 'M151 124 C218 68, 272 56, 310 36 C348 56, 402 68, 469 124', cls: 'p' }
+    ],
+    SS: [
+      { d: 'M151 124 C218 68, 272 56, 310 36 C348 56, 402 68, 469 124', cls: 's' }
+    ],
+    PcP: [
+      { d: 'M150 122 C214 235, 275 313, 310 313 C345 313, 406 235, 470 122', cls: 'p' }
+    ],
+    ScS: [
+      { d: 'M150 122 C214 235, 275 313, 310 313 C345 313, 406 235, 470 122', cls: 's' }
+    ],
+    PKP: [
+      { d: 'M150 122 C205 222, 230 244, 246 254', cls: 'p' },
+      { d: 'M246 254 C278 270, 342 270, 374 254', cls: 'k' },
+      { d: 'M374 254 C390 244, 415 222, 470 122', cls: 'p' }
+    ],
+    PKIKP: [
+      { d: 'M150 122 C205 232, 228 248, 248 258', cls: 'p' },
+      { d: 'M248 258 C270 242, 288 226, 310 220', cls: 'k' },
+      { d: 'M310 220 C332 214, 350 198, 372 182', cls: 'i' },
+      { d: 'M372 182 C402 164, 432 142, 470 122', cls: 'p' }
+    ],
+    PKiKP: [
+      { d: 'M150 122 C205 232, 228 248, 248 258', cls: 'p' },
+      { d: 'M248 258 C284 236, 303 180, 310 172 C317 180, 336 236, 372 258', cls: 'k' },
+      { d: 'M372 258 C392 248, 415 232, 470 122', cls: 'p' }
+    ],
+    Pdiff: [
+      { d: 'M150 122 C206 236, 245 300, 267 313', cls: 'p' },
+      { d: 'M267 313 A93 93 0 0 0 353 313', cls: 'diff' },
+      { d: 'M353 313 C375 300, 414 236, 470 122', cls: 'p' }
+    ],
+    SKS: [
+      { d: 'M150 122 C195 216, 224 246, 246 254', cls: 's' },
+      { d: 'M246 254 C278 270, 342 270, 374 254', cls: 'k' },
+      { d: 'M374 254 C396 246, 425 216, 470 122', cls: 's' }
+    ]
+  };
+
+  const phaseLabels = {
+    p: 'P：壓縮路徑',
+    s: 'S：剪力波路徑，不進外核',
+    k: 'K：外核中的 P 波',
+    i: 'I：內核中的 P 波',
+    diff: 'diff：沿 CMB 繞射'
+  };
+
   return (
     <div className="interactive-grid two">
       <div className="sim-card">
         <svg viewBox="0 0 620 440" className="wide-svg bodywave-svg">
           <defs>
-            <clipPath id="earthClip"><circle cx="310" cy="220" r="185" /></clipPath>
             <radialGradient id="bodyEarth"><stop offset="0" stopColor="#fbbf24" /><stop offset=".36" stopColor="#f97316" /><stop offset=".63" stopColor="#334155" /><stop offset="1" stopColor="#0f172a" /></radialGradient>
           </defs>
           <circle cx="310" cy="220" r="185" fill="url(#bodyEarth)" stroke="rgba(226,232,240,.28)" />
           <circle cx="310" cy="220" r="93" fill="rgba(251,191,36,.18)" stroke="rgba(251,191,36,.55)" />
           <circle cx="310" cy="220" r="48" fill="rgba(251,191,36,.32)" stroke="rgba(251,191,36,.65)" />
-          <path className={phase === 'P' ? 'phase-path active' : 'phase-path'} onClick={() => setPhase('P')} d="M153 122 C242 184, 365 182, 467 124" />
-          <path className={phase === 'S' ? 'phase-path active s' : 'phase-path s'} onClick={() => setPhase('S')} d="M148 122 C225 330, 395 330, 472 122" />
-          <path className={phase === 'PP' ? 'phase-path active pp' : 'phase-path pp'} onClick={() => setPhase('PP')} d="M151 124 C218 68, 272 56, 310 36 C348 56, 402 68, 469 124" />
-          <path className={phase === 'PcP' ? 'phase-path active pcp' : 'phase-path pcp'} onClick={() => setPhase('PcP')} d="M154 122 C220 245, 275 300, 310 306 C345 300, 400 245, 466 122" />
-          <path className={phase === 'PKP' ? 'phase-path active pkp' : 'phase-path pkp'} onClick={() => setPhase('PKP')} d="M150 122 C220 190, 265 265, 310 258 C355 265, 400 190, 470 122" />
-          <path className={phase === 'PKIKP' ? 'phase-path active pkikp' : 'phase-path pkikp'} onClick={() => setPhase('PKIKP')} d="M150 122 C220 210, 280 235, 310 210 C340 185, 400 170, 470 122" />
-          <path className={phase === 'Pdiff' ? 'phase-path active diff' : 'phase-path diff'} onClick={() => setPhase('Pdiff')} d="M145 122 C215 220, 245 294, 278 304 C310 315, 342 304, 375 294 C405 220, 475 122" />
+          {phasePaths[phase].map((seg, idx) => (
+            <path
+              key={`${phase}-${idx}`}
+              className={`phase-path ${seg.cls} active`}
+              d={seg.d}
+            />
+          ))}
           <circle cx="150" cy="122" r="8" fill="#fb7185" />
           <circle cx="470" cy="122" r="8" fill="#67e8f9" />
-          <text x="270" y="424" className="svg-label small">點擊波路徑解鎖相位名稱</text>
-          <text x="405" y="224" className="svg-label small">Outer core: K</text>
-          <text x="292" y="222" className="svg-label small">I</text>
+          <text x="120" y="104" className="svg-label small">Source</text>
+          <text x="452" y="104" className="svg-label small">Receiver</text>
+          <text x="210" y="84" className="svg-label small">Solid mantle</text>
+          <text x="398" y="224" className="svg-label small">Outer core = K</text>
+          <text x="300" y="223" className="svg-label small">I</text>
         </svg>
       </div>
       <div className="control-panel phase-panel">
@@ -1090,9 +1233,14 @@ function BodyWaveChallenge() {
         <h3>{phase}</h3>
         <p>{phaseInfo[phase]}</p>
         <div className="phase-buttons">
-          {Object.keys(phaseInfo).map((p) => <button key={p} className={phase === p ? 'active' : ''} onClick={() => setPhase(p)}>{p}</button>)}
+          {Object.keys(phasePaths).map((p) => <button key={p} className={phase === p ? 'active' : ''} onClick={() => setPhase(p)}>{p}</button>)}
         </div>
-        <p className="sim-explain">顏色提示：K 代表外核中的 P 波；S、SS、ScS 不得進入液態外核；SKS/SKKS 的外核段是 K，不是 S。</p>
+        <div className="phase-legend">
+          {Object.entries(phaseLabels).map(([key, label]) => (
+            <span key={key}><i className={`legend-line ${key}`} />{label}</span>
+          ))}
+        </div>
+        <p className="sim-explain">判讀重點：S、SS、ScS 都只在固態地函中傳播；SKS 的外核段標成 K，代表外核中的 P 波，而不是 S 波穿越外核。</p>
       </div>
     </div>
   );
@@ -1263,6 +1411,7 @@ function layerAt(depth) {
 }
 
 
+
 function RecordSectionLab() {
   const [view, setView] = useState('color');
   const [ampScale, setAmpScale] = useState(8);
@@ -1270,6 +1419,9 @@ function RecordSectionLab() {
   const [showGuide, setShowGuide] = useState(true);
   const imageSrc = view === 'color' ? './textbook/gdms-record-section-color.png' : './textbook/gdms-record-section-bw.png';
   const imageTitle = view === 'color' ? '彩色版：多測站分色與標籤' : '黑白版：傳統 Record Section 風格';
+  const frameHeight = 260 + ((timeWindow - 60) / 80) * 300;
+  const widthPct = 82 + ((ampScale - 2) / 14) * 38;
+  const offsetPct = (widthPct - 100) / 2;
   return (
     <div className="record-lab">
       <div className="record-hero-card glass-lite">
@@ -1293,12 +1445,21 @@ function RecordSectionLab() {
               <button className={view === 'bw' ? 'active' : ''} onClick={() => setView('bw')}>黑白版</button>
             </div>
           </div>
-          <div className="record-image-frame">
-            <img src={imageSrc} alt={imageTitle} />
+          <div className="record-image-frame" style={{ height: `${frameHeight}px`, maxHeight: `${frameHeight}px`, overflow: 'hidden' }}>
+            <img
+              src={imageSrc}
+              alt={imageTitle}
+              style={{
+                width: `${widthPct}%`,
+                maxWidth: 'none',
+                marginLeft: `${-offsetPct}%`,
+                display: 'block'
+              }}
+            />
             {showGuide && (
               <>
                 <span className="record-callout distance">Distance：測站離震央越遠，越往右</span>
-                <span className="record-callout time">Time：發震後秒數，往下或往上依圖軸設定判讀</span>
+                <span className="record-callout time">Time：目前示意時間窗 0–{timeWindow} s</span>
                 <span className="record-callout trend">連續斜帶：可追蹤的波群走時趨勢</span>
               </>
             )}
@@ -1316,11 +1477,12 @@ function RecordSectionLab() {
             <span>資料網路：CWASN / Taiwan GDMS</span>
             <span>成功繪製：117 個測站</span>
             <span>濾波頻帶：0.5–5.0 Hz</span>
+            <span>示意 amp_scale：{ampScale}×</span>
+            <span>顯示時間窗：0–{timeWindow} s</span>
             <span>座標公式：X = distance + normalized amplitude × amp_scale</span>
           </div>
           <p className="sim-explain">
-            調整 amp_scale 的概念是改變每條波形左右擺動的寬度；太小會看不清波形，太大會互相重疊。
-            你的正式圖片採用兼顧可讀性與密度的設定，因此能同時看到整體走時趨勢與單站波形細節。
+            amp_scale 會改變左圖的左右展寬示意；時間窗會改變目前顯示的垂直視窗高度，幫助理解放大量與時間窗對 Record Section 視覺化的影響。
           </p>
         </div>
       </div>

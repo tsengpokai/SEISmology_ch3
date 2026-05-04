@@ -535,3 +535,49 @@ hr { width: 100%; border: 0; border-top: 1px solid var(--line); }
   .record-analysis-grid, .process-steps { grid-template-columns: 1fr; }
   .record-callout { display: none; }
 }
+
+
+.phase-path.k {
+  stroke: #fbbf24;
+  stroke-width: 6;
+  fill: none;
+  stroke-linecap: round;
+}
+.phase-path.i {
+  stroke: #ffffff;
+  stroke-width: 5;
+  fill: none;
+  stroke-linecap: round;
+}
+.phase-path.diff {
+  stroke: #34d399;
+  stroke-width: 6;
+  fill: none;
+  stroke-linecap: round;
+  stroke-dasharray: 8 8;
+}
+.phase-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: .92rem;
+  line-height: 1.5;
+}
+.phase-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.legend-line {
+  width: 28px;
+  height: 4px;
+  border-radius: 999px;
+  display: inline-block;
+}
+.legend-line.p { background: #67e8f9; }
+.legend-line.s { background: #e879f9; }
+.legend-line.k { background: #fbbf24; }
+.legend-line.i { background: #ffffff; }
+.legend-line.diff { background: #34d399; }

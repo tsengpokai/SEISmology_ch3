@@ -20,22 +20,5 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-  
-<script id="record-section-launcher">
-(function(){
-  function addRecordSectionLauncher(){
-    if(document.getElementById('recordSectionLauncher')) return;
-    var a=document.createElement('a');
-    a.id='recordSectionLauncher';
-    a.href='./record-section/';
-    a.textContent='實作｜繪製走時與波形剖面圖';
-    a.style.cssText='position:fixed;left:18px;bottom:18px;z-index:99999;padding:12px 16px;border-radius:999px;background:linear-gradient(135deg,#78d2ff,#d9b76f);color:#06111d;font:800 14px Inter,system-ui,sans-serif;text-decoration:none;box-shadow:0 14px 36px rgba(0,0,0,.28);border:1px solid rgba(255,255,255,.35)';
-    document.body.appendChild(a);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',addRecordSectionLauncher);
-  else addRecordSectionLauncher();
-})();
-</script>
-
-</body>
+  </body>
 </html>

@@ -356,3 +356,36 @@ hr { width: 100%; border: 0; border-top: 1px solid var(--line); }
   .textbook-figure.wide { grid-column: auto; }
   .figure-image-wrap { min-height: 180px; padding: 10px; }
 }
+
+
+.error-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 32px;
+  color: #f8fafc;
+  background: radial-gradient(circle at top, #1e3a8a, #020617 60%);
+  font-family: Inter, system-ui, sans-serif;
+}
+.error-screen > * {
+  max-width: 780px;
+}
+.error-screen pre {
+  white-space: pre-wrap;
+  background: rgba(15, 23, 42, .8);
+  border: 1px solid rgba(148, 163, 184, .35);
+  border-radius: 16px;
+  padding: 16px;
+}
+.figure-image-wrap.image-missing::after {
+  content: '圖片未載入：請確認 public/textbook 圖片資料夾是否存在';
+  display: grid;
+  place-items: center;
+  min-height: 180px;
+  padding: 18px;
+  color: var(--muted);
+  text-align: center;
+}
+.figure-image-wrap.image-missing img {
+  display: none;
+}

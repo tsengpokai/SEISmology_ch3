@@ -119,4 +119,3 @@ for spine in ax.spines.values():
 fig.savefig(output_path, dpi=200, bbox_inches="tight", facecolor="white")
 plt.close(fig)
 print("Done. Image saved to:", output_path, flush=True)
-

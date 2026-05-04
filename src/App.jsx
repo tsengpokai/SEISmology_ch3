@@ -211,6 +211,146 @@ const modules = [
   }
 ];
 
+
+const textbookFigures = {
+  resolution: [
+    {
+      src: './textbook/fig-3-2-1-ray-paths.webp',
+      title: '圖 3.2-1｜三種基本波線路徑',
+      caption: '以「直接波、反射波、頭波」作為全章入口，說明地震學不是只看波形，而是利用波在不同介質中的路徑差與時間差，反推地下速度結構。',
+      wide: true
+    },
+    {
+      src: './textbook/fig-3-5-velocity-model.webp',
+      title: '圖 3.5-1｜地球一維速度模型',
+      caption: 'JB 與 IASP91 模型展示 P 波、S 波速度隨深度變化。這張圖對應 3.1 的核心觀念：地震學能把走時資料轉換成地球內部分層模型。'
+    }
+  ],
+  refraction: [
+    {
+      src: './textbook/fig-3-2-1-ray-paths.webp',
+      title: '圖 3.2-1｜直接波、反射波與頭波',
+      caption: '上層速度為 v₀、下層半空間速度為 v₁，且 v₁ > v₀ 時，除了直接波與反射波，也會形成沿高速介面傳播的頭波。',
+      wide: true
+    },
+    {
+      src: './textbook/fig-3-2-2-tx-curves.webp',
+      title: '圖 3.2-2｜T-x 走時曲線',
+      caption: '直接波與頭波在 T-x 圖上都是直線，但斜率不同；交會距離 x_d 之後，頭波會比直接波更早抵達，成為初達波。'
+    },
+    {
+      src: './textbook/fig-3-2-3-head-wave.webp',
+      title: '圖 3.2-3｜頭波的惠更斯波源觀點',
+      caption: '折射脈衝沿介面下方高速層傳播，持續向上層激發波前；這能幫助理解為什麼頭波會以臨界角返回地表。'
+    },
+    {
+      src: './textbook/fig-3-2-5-record-section.webp',
+      title: '圖 3.2-5｜折射震測波形剖面',
+      caption: '實際資料會把不同距離的測站波形排成 record section，Pg、Pn、PmP 等相位會在圖上形成可判讀的走時趨勢。',
+      wide: true
+    }
+  ],
+  reflection: [
+    {
+      src: './textbook/fig-3-3-reflection-hyperbola-rayparam.webp',
+      title: '圖 3.3-1、3.3-2｜反射雙曲線與射線參數',
+      caption: '水平反射界面的走時曲線呈雙曲線；曲線斜率 dT/dx 對應射線參數 p，也就是地震波從地下回到地表時的重要幾何線索。'
+    },
+    {
+      src: './textbook/fig-3-3-vibroseis-reflection.webp',
+      title: '反射震測野外概念圖｜多重反射與接收記錄',
+      caption: '震源車、地表波、折射、一次反射、多次反射與繞射可能同時出現在資料中，因此反射震測必須靠處理流程把真正的地下反射訊號凸顯出來。',
+      wide: true
+    },
+    {
+      src: './textbook/fig-3-3-tau-p-transform.webp',
+      title: '圖 3.3-8、3.3-9｜T-x 與 τ-p 表示法',
+      caption: 'τ-p 轉換把不同相位投影到截距—慢度空間，能分離直接波、反射波與頭波，是理解資料處理的重要橋樑。'
+    }
+  ],
+  spherical: [
+    {
+      src: './textbook/fig-3-4-bottoming-ray.webp',
+      title: '圖 3.4-2｜球體地球中的最深點',
+      caption: '在球體地球中，射線參數 p = r sin i / v 維持不變；當 i = 90° 時，射線抵達最深點並開始向上折返。'
+    },
+    {
+      src: './textbook/fig-3-4-triplication.webp',
+      title: '圖 3.4-5、3.4-6｜平滑速度梯度與 Triplication',
+      caption: '速度隨深度平滑增加時，走時曲線平順；若速度突然增加，同一距離可能出現三條射線抵達，形成三叉狀走時曲線與焦散高振幅。',
+      wide: true
+    }
+  ],
+  bodywaves: [
+    {
+      src: './textbook/fig-3-5-velocity-model.webp',
+      title: '圖 3.5-1｜JB 與 IASP91 地球速度模型',
+      caption: 'P 波與 S 波速度剖面揭示地殼、地函、外核與內核；S 波在外核消失，是外核為液態的重要證據。'
+    },
+    {
+      src: './textbook/fig-3-5-simple-phases.webp',
+      title: '圖 3.5-2｜體波相位與對應路徑',
+      caption: 'P、S、pP、sP、PP、ScS 等相位名稱可視為波的旅行履歷，字母說明它經過了哪些路徑與邊界。',
+      wide: true
+    },
+    {
+      src: './textbook/fig-3-5-phase-nomenclature.webp',
+      title: '圖 3.5-5｜全球體波相位命名圖',
+      caption: 'P ray 用實線、S ray 用虛線，K 代表穿過外核、I 代表穿過內核、c 代表在核幔邊界反射。這張圖對應本節的相位挑戰互動。',
+      wide: true
+    }
+  ],
+  anisotropy: [
+    {
+      src: './textbook/fig-3-6-shear-splitting.webp',
+      title: '圖 3.6-1｜剪力波分裂',
+      caption: '一個原本單一偏振的 S 波進入非均向介質後，會分裂為快波與慢波；兩者離開非均向區後仍保留時間差。'
+    },
+    {
+      src: './textbook/fig-3-6-transverse-isotropy.webp',
+      title: '圖 3.6-2｜橫向等向性中的波速方向差異',
+      caption: '層狀構造會讓平行層理與垂直層理方向的 P、S 波速度不同，這正是 SPO 非均向性的直觀圖像。'
+    },
+    {
+      src: './textbook/fig-3-6-olivine-anisotropy.webp',
+      title: '圖 3.6-3｜橄欖石晶格非均向性',
+      caption: '橄欖石不同晶軸方向的 P、S 波速不同；若地函流動讓晶格定向排列，LPO 就能記錄深部流動方向。'
+    }
+  ],
+  attenuation: [
+    {
+      src: './textbook/fig-3-7-regional-temperature-attenuation.webp',
+      title: '圖 3.7-1、3.7-2｜區域衰減與溫度敏感性',
+      caption: '同一地震在不同地區的高頻能量保存程度不同；相較於速度，衰減 Q⁻¹ 對溫度變化更敏感。',
+      wide: true
+    },
+    {
+      src: './textbook/fig-3-7-tomography-spreading.webp',
+      title: '圖 3.7-3、3.7-4｜速度/衰減異常與幾何擴散',
+      caption: '洋中脊下方可出現低速且高衰減區；表面波則會因球面幾何擴散而在不同震央距呈現不同振幅。'
+    },
+    {
+      src: './textbook/fig-3-7-scattering-coda-moon.webp',
+      title: '圖 3.7-9、3.7-10｜散射、尾波與月震對比',
+      caption: '散射會把能量延後到尾波中；月球因表層碎裂且內在衰減小，月震記錄常呈現長時間混亂尾波。',
+      wide: true
+    }
+  ],
+  composition: [
+    {
+      src: './textbook/fig-3-8-moment-inertia.webp',
+      title: '圖 3.8-1｜轉動慣量的幾何意義',
+      caption: '轉動慣量取決於質量距離旋轉軸的分布；地球 C/Ma² 約 0.33，低於均勻球的 0.4，表示質量集中於深部。'
+    },
+    {
+      src: './textbook/fig-3-8-prem-density-pressure.webp',
+      title: '圖 3.8-4、3.8-5｜PREM 速度、密度、重力與壓力',
+      caption: 'PREM 模型顯示密度在 410 km、660 km 與 CMB 有明顯跳躍；壓力則隨深度增加，在地心可達數百 GPa。',
+      wide: true
+    }
+  ]
+};
+
 const phaseInfo = {
   P: 'P：只以 P 波形式穿越地函，是最基本的直達體波。',
   S: 'S：剪力波，只能在固體中傳播，外地核為液態所以 S 波不能穿過外核。',
@@ -452,6 +592,8 @@ function ModulePage({ module, navigate }) {
         <ProfessorNote note={module.note} />
       </div>
 
+
+      <TextbookFigures type={module.component} />
       <section className="interactive-zone glass">
         <div className="zone-title">
           <p className="eyebrow">Interactive Lab</p>
@@ -478,6 +620,35 @@ function ModulePage({ module, navigate }) {
         <button onClick={() => navigate(nextModule(module.hash).hash)}>下一章：{nextModule(module.hash).id}</button>
       </div>
     </article>
+  );
+}
+
+
+function TextbookFigures({ type }) {
+  const figures = textbookFigures[type] || [];
+  if (!figures.length) return null;
+  return (
+    <section className="textbook-gallery glass">
+      <div className="zone-title">
+        <p className="eyebrow">Textbook Figures</p>
+        <h2>課本圖像輔助說明</h2>
+        <p>以下圖片放在對應知識點旁，幫助你把公式、波線與實際紀錄連在一起。</p>
+      </div>
+      <div className="textbook-figure-grid">
+        {figures.map((fig, index) => (
+          <figure key={fig.src} className={`textbook-figure ${fig.wide ? 'wide' : ''}`}>
+            <div className="figure-image-wrap">
+              <img src={fig.src} alt={fig.title} loading="lazy" />
+            </div>
+            <figcaption>
+              <span className="figure-index">圖 {index + 1}</span>
+              <strong>{fig.title}</strong>
+              <p>{fig.caption}</p>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -1174,4 +1345,3 @@ function Footer() {
 }
 
 export default App;
-

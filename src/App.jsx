@@ -400,7 +400,7 @@ const textbookFigures = {
 
 const phaseInfo = {
   P: 'P：只以 P 波形式穿越地函，是最基本的直達體波。',
-  S: 'S：剪力波，只能在固體中傳播，外地核為液態所以 S 波不能穿過外核。',
+  S: 'S：剪力波，只能在固體中傳播；外地核為液態，所以 S 波不能穿過外核。互動圖中 S 線必須留在固態地函內。',
   PP: 'PP：P 波在地表反射一次後再抵達測站。',
   PcP: 'PcP：P 波在核幔邊界 CMB 反射後返回地表。',
   PKP: 'PKP：P 波進入外核（K）後再回到地函，是穿核相位。',
@@ -1072,12 +1072,12 @@ function BodyWaveChallenge() {
           <circle cx="310" cy="220" r="93" fill="rgba(251,191,36,.18)" stroke="rgba(251,191,36,.55)" />
           <circle cx="310" cy="220" r="48" fill="rgba(251,191,36,.32)" stroke="rgba(251,191,36,.65)" />
           <path className={phase === 'P' ? 'phase-path active' : 'phase-path'} onClick={() => setPhase('P')} d="M153 122 C242 184, 365 182, 467 124" />
-          <path className={phase === 'S' ? 'phase-path active s' : 'phase-path s'} onClick={() => setPhase('S')} d="M148 314 C240 250, 376 250, 472 313" />
+          <path className={phase === 'S' ? 'phase-path active s' : 'phase-path s'} onClick={() => setPhase('S')} d="M148 122 C225 330, 395 330, 472 122" />
           <path className={phase === 'PP' ? 'phase-path active pp' : 'phase-path pp'} onClick={() => setPhase('PP')} d="M151 124 C218 68, 272 56, 310 36 C348 56, 402 68, 469 124" />
-          <path className={phase === 'PcP' ? 'phase-path active pcp' : 'phase-path pcp'} onClick={() => setPhase('PcP')} d="M154 122 C240 230, 281 298, 310 313 C339 298, 380 230, 466 122" />
-          <path className={phase === 'PKP' ? 'phase-path active pkp' : 'phase-path pkp'} onClick={() => setPhase('PKP')} d="M150 122 C248 252, 282 260, 310 220 C338 260, 372 252, 470 122" />
-          <path className={phase === 'PKIKP' ? 'phase-path active pkikp' : 'phase-path pkikp'} onClick={() => setPhase('PKIKP')} d="M150 122 C232 272, 288 255, 310 220 C332 185, 388 168, 470 122" />
-          <path className={phase === 'Pdiff' ? 'phase-path active diff' : 'phase-path diff'} onClick={() => setPhase('Pdiff')} d="M145 122 C178 300, 442 300, 475 122" />
+          <path className={phase === 'PcP' ? 'phase-path active pcp' : 'phase-path pcp'} onClick={() => setPhase('PcP')} d="M154 122 C220 245, 275 300, 310 306 C345 300, 400 245, 466 122" />
+          <path className={phase === 'PKP' ? 'phase-path active pkp' : 'phase-path pkp'} onClick={() => setPhase('PKP')} d="M150 122 C220 190, 265 265, 310 258 C355 265, 400 190, 470 122" />
+          <path className={phase === 'PKIKP' ? 'phase-path active pkikp' : 'phase-path pkikp'} onClick={() => setPhase('PKIKP')} d="M150 122 C220 210, 280 235, 310 210 C340 185, 400 170, 470 122" />
+          <path className={phase === 'Pdiff' ? 'phase-path active diff' : 'phase-path diff'} onClick={() => setPhase('Pdiff')} d="M145 122 C215 220, 245 294, 278 304 C310 315, 342 304, 375 294 C405 220, 475 122" />
           <circle cx="150" cy="122" r="8" fill="#fb7185" />
           <circle cx="470" cy="122" r="8" fill="#67e8f9" />
           <text x="270" y="424" className="svg-label small">點擊波路徑解鎖相位名稱</text>
@@ -1092,7 +1092,7 @@ function BodyWaveChallenge() {
         <div className="phase-buttons">
           {Object.keys(phaseInfo).map((p) => <button key={p} className={phase === p ? 'active' : ''} onClick={() => setPhase(p)}>{p}</button>)}
         </div>
-        <p className="sim-explain">顏色提示：穿越外核的路徑會偏金色；在 CMB 反射或沿 CMB 繞射的路徑，會貼近核幔邊界。</p>
+        <p className="sim-explain">顏色提示：K 代表外核中的 P 波；S、SS、ScS 不得進入液態外核；SKS/SKKS 的外核段是 K，不是 S。</p>
       </div>
     </div>
   );
